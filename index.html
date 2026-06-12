@@ -11,11 +11,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: #0f0f0f; color: #f0f0f0; font-family: -apple-system, 'Inter', system-ui, sans-serif; overscroll-behavior: none; }
     body { max-width: 430px; margin: 0 auto; position: relative; min-height: 100vh; }
-
+ 
     button { cursor: pointer; font-family: inherit; }
     input { font-family: inherit; outline: none; }
     input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-
+ 
     /* ── HEADER ── */
     #header { padding: 44px 20px 16px; background: linear-gradient(180deg, #181818 0%, #0f0f0f 100%); }
     .header-row { display: flex; justify-content: space-between; align-items: center; }
@@ -24,7 +24,7 @@
     .header-right { text-align: right; }
     .header-stats { font-size: 11px; color: #888; }
     .header-goal { font-size: 12px; color: #E8845A; font-weight: 600; margin-top: 2px; }
-
+ 
     /* ── DAY STRIP ── */
     #day-strip { display: flex; gap: 6px; margin-top: 18px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     #day-strip::-webkit-scrollbar { display: none; }
@@ -32,44 +32,44 @@
     .day-btn.today { background: #222; color: #fff; }
     .day-btn.selected { font-weight: 700; color: #000; }
     .day-btn-icon { font-size: 9px; margin-top: 2px; opacity: 0.75; }
-
+ 
     /* ── TABS ── */
     #tabs { display: flex; padding: 0 20px; gap: 8px; border-bottom: 1px solid #1e1e1e; }
     .tab-btn { flex: 1; padding: 14px 0; background: none; border: none; font-size: 13px; color: #666; font-weight: 400; border-bottom: 2px solid transparent; transition: all 0.2s; }
     .tab-btn.active { color: #E8845A; font-weight: 700; border-bottom-color: #E8845A; }
-
+ 
     /* ── PANELS ── */
     .panel { display: none; padding: 20px 20px 0; }
     .panel.active { display: block; }
-
+ 
     /* ── CARDS ── */
     .card { background: #181818; border-radius: 16px; padding: 20px; margin-bottom: 12px; }
     .card-sm { background: #181818; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; border: 1px solid #252525; }
-
+ 
     /* ── RINGS (SVG) ── */
     .ring-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
     .ring-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-
+ 
     /* ── CALORIE SUMMARY ── */
     #cal-card { display: flex; align-items: center; gap: 20px; }
     #cal-rows { flex: 1; }
     .cal-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
     .cal-row span:first-child { color: #888; font-size: 12px; }
     .cal-row.net span:last-child { font-weight: 700; }
-
+ 
     /* ── MACRO ROW ── */
     #macro-row { display: flex; gap: 8px; margin-bottom: 12px; }
     .macro-card { flex: 1; background: #181818; border-radius: 12px; padding: 12px 10px; text-align: center; }
     .macro-name { font-size: 11px; color: #888; margin-top: 4px; }
     .macro-goal { font-size: 10px; color: #555; }
-
+ 
     /* ── STEPS ── */
     #steps-card { border-radius: 16px; background: #181818; padding: 14px 16px; margin-bottom: 12px; }
     .steps-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .steps-row span:first-child { font-size: 14px; font-weight: 600; }
     .steps-val { font-size: 14px; font-weight: 700; color: #7EC89A; }
     input[type=range] { width: 100%; accent-color: #7EC89A; }
-
+ 
     /* ── TODAY PREVIEW ── */
     #today-preview { border-radius: 16px; padding: 16px; margin-bottom: 20px; }
     .preview-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -78,19 +78,19 @@
     .preview-row { display: flex; justify-content: space-between; align-items: center; }
     .preview-start { border: none; border-radius: 10px; padding: 10px 16px; font-weight: 700; font-size: 13px; }
     .preview-meta { font-size: 12px; color: #888; margin-top: 10px; }
-
+ 
     /* ── DAY SELECTOR (plan tab) ── */
     #plan-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
     .plan-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .plan-title { font-size: 17px; font-weight: 700; }
     .plan-tag { font-size: 12px; margin-left: 8px; }
-
+ 
     /* ── REST DAY ── */
     #rest-card { text-align: center; padding: 48px 20px; color: #666; }
     .rest-emoji { font-size: 48px; margin-bottom: 12px; }
     .rest-title { font-size: 16px; font-weight: 600; color: #888; margin-bottom: 6px; }
     .rest-body { font-size: 13px; color: #555; }
-
+ 
     /* ── RUN DAY ── */
     #run-card { border-radius: 16px; padding: 20px; margin-bottom: 12px; }
     .run-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -107,7 +107,7 @@
     .run-phase-note { font-size: 12px; color: #888; margin-top: 2px; }
     .coach-tip-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
     .coach-tip-body { font-size: 13px; color: #ccc; line-height: 1.5; }
-
+ 
     /* ── EXERCISE CARDS ── */
     .ex-card { border-radius: 14px; overflow: hidden; margin-bottom: 8px; transition: all 0.2s; border: 1px solid #252525; }
     .ex-card.done { background: #1a2a1a; border-color: #7EC89A44; }
@@ -128,7 +128,7 @@
     .set-btn { padding: 8px 16px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; background: #252525; color: #888; transition: all 0.2s; }
     .set-btn.done { background: #7EC89A; color: #000; }
     .no-eq-note { margin: 8px 0; padding: 12px 16px; background: #181818; border-radius: 12px; font-size: 12px; color: #666; text-align: center; }
-
+ 
     /* ── FOOD LOG ── */
     #add-food-btn { width: 100%; padding: 14px; background: #E8845A; color: #000; border: none; border-radius: 14px; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
     #food-search-panel { background: #181818; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: none; }
@@ -156,19 +156,19 @@
     .food-item-del { background: none; border: none; color: #555; font-size: 16px; padding: 0; margin-left: 12px; }
     .toning-tip-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
     .toning-tip-body { font-size: 13px; color: #ccc; line-height: 1.5; }
-
+ 
     /* ── BOTTOM NAV ── */
     #bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #111; border-top: 1px solid #1e1e1e; display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
     .nav-btn { flex: 1; padding: 12px 0; background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 2px; }
     .nav-icon { font-size: 20px; }
     .nav-label { font-size: 10px; color: #555; font-weight: 400; }
     .nav-btn.active .nav-label { color: #E8845A; font-weight: 700; }
-
+ 
     #scroll-body { overflow-y: auto; padding-bottom: 80px; }
   </style>
 </head>
 <body>
-
+ 
 <div id="app">
   <div id="header">
     <div class="header-row">
@@ -183,13 +183,13 @@
     </div>
     <div id="day-strip"></div>
   </div>
-
+ 
   <div id="tabs">
     <button class="tab-btn active" data-tab="today">Today</button>
     <button class="tab-btn" data-tab="plan">Workout</button>
     <button class="tab-btn" data-tab="log">Nutrition</button>
   </div>
-
+ 
   <div id="scroll-body">
     <!-- TODAY PANEL -->
     <div class="panel active" id="panel-today">
@@ -205,7 +205,7 @@
           <div class="cal-row net"><span>Net</span><span id="cal-net-val">0 / 1700</span></div>
         </div>
       </div>
-
+ 
       <!-- Macros -->
       <div id="macro-row">
         <div class="macro-card">
@@ -221,7 +221,7 @@
           <div class="macro-name">Fat</div><div class="macro-goal">55g</div>
         </div>
       </div>
-
+ 
       <!-- Steps -->
       <div id="steps-card">
         <div class="steps-row">
@@ -230,17 +230,17 @@
         </div>
         <input type="range" id="steps-slider" min="0" max="20000" step="500" value="10000" />
       </div>
-
+ 
       <!-- Today preview -->
       <div id="today-preview"></div>
     </div>
-
+ 
     <!-- PLAN PANEL -->
     <div class="panel" id="panel-plan">
       <div id="plan-header"></div>
       <div id="plan-content"></div>
     </div>
-
+ 
     <!-- LOG PANEL -->
     <div class="panel" id="panel-log">
       <button id="add-food-btn">+ Add Food</button>
@@ -268,7 +268,7 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- Bottom nav -->
   <nav id="bottom-nav">
     <button class="nav-btn active" data-tab="today"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
@@ -276,12 +276,12 @@
     <button class="nav-btn" data-tab="log"><span class="nav-icon">🥗</span><span class="nav-label">Food</span></button>
   </nav>
 </div>
-
+ 
 <script>
 // ── DATA ────────────────────────────────────────────────────────────────────
-
+ 
 const PROFILE = { calorieGoal: 1700, proteinGoal: 120, carbGoal: 180, fatGoal: 55 };
-
+ 
 const TRAINING_PLAN = [
   {
     day: "Monday", focus: "Lower Body", tag: "Glutes & Legs", color: "#E8845A", icon: "🍑",
@@ -358,7 +358,7 @@ const TRAINING_PLAN = [
     restDay: true,
   },
 ];
-
+ 
 const FOOD_DB = [
   { name: "Chicken Breast (100g)", cal: 165, protein: 31, carbs: 0, fat: 3.6 },
   { name: "Greek Yogurt (150g)", cal: 88, protein: 15, carbs: 6, fat: 0.7 },
@@ -373,9 +373,35 @@ const FOOD_DB = [
   { name: "Cottage Cheese (100g)", cal: 98, protein: 11, carbs: 3.4, fat: 4.3 },
   { name: "Protein Shake (1 scoop)", cal: 120, protein: 24, carbs: 4, fat: 1.5 },
 ];
-
+ 
+// ── STORAGE ───────────────────────────────────────────────────────────────────
+ 
+const STORAGE_KEY = 'toneup_v1';
+ 
+function todayDateStr() {
+  return new Date().toISOString().slice(0, 10); // e.g. "2026-06-12"
+}
+ 
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      date: todayDateStr(),
+      steps,
+      foodLog,
+      completedSets,
+    }));
+  } catch(e) { /* private mode or storage full — silently ignore */ }
+}
+ 
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+ 
 // ── STATE ────────────────────────────────────────────────────────────────────
-
+ 
 const todayIdx = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
 let selectedDay = todayIdx;
 let activeTab = 'today';
@@ -383,9 +409,20 @@ let steps = 10000;
 let foodLog = [];      // {id, name, cal, protein, carbs, fat}
 let completedSets = {}; // "exName-setIdx" -> bool
 let expandedEx = null;
-
+ 
+// Restore from localStorage — auto-reset if it's a new day
+(function() {
+  const saved = loadState();
+  if (saved && saved.date === todayDateStr()) {
+    steps         = saved.steps         ?? 10000;
+    foodLog       = saved.foodLog       ?? [];
+    completedSets = saved.completedSets ?? {};
+  }
+  // New day → keep fresh defaults; next saveState() stamps today's date
+})();
+ 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
-
+ 
 function makeSVGRing(svgEl, pct, size, stroke, color) {
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
@@ -400,11 +437,11 @@ function makeSVGRing(svgEl, pct, size, stroke, color) {
       style="transition:stroke-dasharray 0.5s ease" />
   `;
 }
-
+ 
 function fmt(n, dec=1) { return Math.round(n * Math.pow(10,dec)) / Math.pow(10,dec); }
-
+ 
 // ── RENDER: TODAY ─────────────────────────────────────────────────────────────
-
+ 
 function renderToday() {
   const totalCal  = foodLog.reduce((s,i) => s + i.cal, 0);
   const totalProt = foodLog.reduce((s,i) => s + i.protein, 0);
@@ -414,7 +451,7 @@ function renderToday() {
   const net       = totalCal - burned;
   const left      = PROFILE.calorieGoal - net;
   const over      = left < 0;
-
+ 
   // Calorie ring
   const calPct = Math.min((net / PROFILE.calorieGoal) * 100, 100);
   const calColor = over ? '#E85A5A' : '#E8845A';
@@ -422,13 +459,13 @@ function renderToday() {
   document.getElementById('cal-ring-label').innerHTML =
     `<div style="font-size:16px;font-weight:800;color:${calColor}">${Math.abs(left)}</div>
      <div style="font-size:9px;color:#888;margin-top:1px">${over ? 'over' : 'left'}</div>`;
-
+ 
   document.getElementById('cal-eaten-val').textContent = `${totalCal} kcal`;
   document.getElementById('cal-burn-label').textContent = `Burned (${steps.toLocaleString()} steps)`;
   document.getElementById('cal-burn-val').textContent = `−${burned} kcal`;
   document.getElementById('cal-net-val').textContent = `${net} / ${PROFILE.calorieGoal}`;
   document.getElementById('steps-display').textContent = steps.toLocaleString();
-
+ 
   // Macro rings
   const macros = [
     { id: 'protein-ring', labelId: 'protein-ring-label', val: totalProt, goal: PROFILE.proteinGoal, color: '#5B8EE6' },
@@ -440,14 +477,14 @@ function renderToday() {
     document.getElementById(m.labelId).innerHTML =
       `<span style="font-size:11px;font-weight:700;color:${m.color}">${fmt(m.val,0)}</span>`;
   });
-
+ 
   // Today preview
   const plan = TRAINING_PLAN[todayIdx];
   let meta = '';
   if (plan.restDay) meta = '';
   else if (plan.runDay) meta = `<div class="preview-meta">${plan.runPlan.duration} · ~${plan.runPlan.calBurn} kcal burn · outdoors</div>`;
   else meta = `<div class="preview-meta">${plan.exercises.length} exercises · ~${plan.exercises.reduce((s,e)=>s+e.sets,0)} sets · no equipment</div>`;
-
+ 
   const preview = document.getElementById('today-preview');
   preview.style.background = `linear-gradient(135deg, ${plan.color}22 0%, #181818 100%)`;
   preview.style.border = `1px solid ${plan.color}33`;
@@ -464,12 +501,12 @@ function renderToday() {
     ${meta}
   `;
 }
-
+ 
 // ── RENDER: PLAN ──────────────────────────────────────────────────────────────
-
+ 
 function renderPlan() {
   const plan = TRAINING_PLAN[selectedDay];
-
+ 
   // Header
   document.getElementById('plan-header').innerHTML = `
     <div class="plan-dot" style="background:${plan.color}"></div>
@@ -478,9 +515,9 @@ function renderPlan() {
       <span class="plan-tag" style="color:${plan.color}">${plan.tag}</span>
     </div>
   `;
-
+ 
   const content = document.getElementById('plan-content');
-
+ 
   if (plan.restDay) {
     content.innerHTML = `
       <div id="rest-card">
@@ -490,7 +527,7 @@ function renderPlan() {
       </div>`;
     return;
   }
-
+ 
   if (plan.runDay) {
     const phases = plan.runPlan.structure.map((s, i) => `
       <div class="run-phase">
@@ -523,7 +560,7 @@ function renderPlan() {
       </div>`;
     return;
   }
-
+ 
   // Strength day
   const cards = plan.exercises.map((ex, idx) => {
     const completedCount = Array.from({length: ex.sets}, (_, i) => completedSets[`${ex.name}-${i}`]).filter(Boolean).length;
@@ -556,12 +593,12 @@ function renderPlan() {
           </div>` : ''}
       </div>`;
   }).join('');
-
+ 
   content.innerHTML = cards + `<div class="no-eq-note">All exercises are bodyweight — no equipment needed 🏠</div>`;
 }
-
+ 
 // ── RENDER: FOOD LOG ──────────────────────────────────────────────────────────
-
+ 
 function renderFoodLog() {
   const list = document.getElementById('food-log-list');
   if (foodLog.length === 0) {
@@ -581,7 +618,7 @@ function renderFoodLog() {
   }
   renderFoodSearch();
 }
-
+ 
 function renderFoodSearch() {
   const q = document.getElementById('food-search').value.toLowerCase();
   const results = FOOD_DB.filter(f => f.name.toLowerCase().includes(q));
@@ -594,9 +631,9 @@ function renderFoodSearch() {
       </div>
     </button>`).join('');
 }
-
+ 
 // ── RENDER: DAY STRIP ─────────────────────────────────────────────────────────
-
+ 
 function renderDayStrip() {
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   document.getElementById('day-strip').innerHTML = days.map((d, i) => {
@@ -615,9 +652,9 @@ function renderDayStrip() {
       </button>`;
   }).join('');
 }
-
+ 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
-
+ 
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -630,60 +667,64 @@ function switchTab(tab) {
   if (tab === 'plan') { renderDayStrip(); renderPlan(); }
   if (tab === 'log') renderFoodLog();
 }
-
+ 
 function selectDay(idx) {
   selectedDay = idx;
   expandedEx = null;
   switchTab('plan');
 }
-
+ 
 function toggleEx(name) {
   expandedEx = expandedEx === name ? null : name;
   renderPlan();
 }
-
+ 
 function toggleSet(exName, setIdx) {
   const key = `${exName}-${setIdx}`;
   completedSets[key] = !completedSets[key];
+  saveState();
   renderPlan();
 }
-
+ 
 function addFood(food) {
   if (typeof food === 'string') food = JSON.parse(food);
   foodLog.push({ ...food, id: Date.now() });
+  saveState();
   document.getElementById('food-search-panel').classList.remove('open');
   document.getElementById('food-search').value = '';
   renderFoodLog();
   renderToday();
 }
-
+ 
 function removeFood(id) {
   foodLog = foodLog.filter(i => i.id !== id);
+  saveState();
   renderFoodLog();
   renderToday();
 }
-
+ 
 // ── EVENTS ────────────────────────────────────────────────────────────────────
-
+ 
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
-
+ 
 document.getElementById('steps-slider').addEventListener('input', e => {
   steps = parseInt(e.target.value);
+  saveState();
   renderToday();
 });
-
+ 
 document.getElementById('add-food-btn').addEventListener('click', () => {
   document.getElementById('food-search-panel').classList.toggle('open');
   renderFoodSearch();
 });
-
+ 
 document.getElementById('food-search').addEventListener('input', renderFoodSearch);
-
+ 
 document.getElementById('custom-add-btn').addEventListener('click', () => {
   const name = document.getElementById('c-name').value.trim();
   const cal  = parseFloat(document.getElementById('c-cal').value) || 0;
@@ -696,9 +737,10 @@ document.getElementById('custom-add-btn').addEventListener('click', () => {
   });
   ['c-name','c-cal','c-protein','c-carbs','c-fat'].forEach(id => document.getElementById(id).value = '');
 });
-
+ 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-
+ 
+document.getElementById('steps-slider').value = steps; // sync slider to restored value
 renderDayStrip();
 renderToday();
 </script>
