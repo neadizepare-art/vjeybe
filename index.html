@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0f0f0f" />
+  <title>Tone Up ✨</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0f0f0f; color: #f0f0f0; font-family: -apple-system, 'Inter', system-ui, sans-serif; overscroll-behavior: none; }
+    body { max-width: 430px; margin: 0 auto; position: relative; min-height: 100vh; }
+
+    button { cursor: pointer; font-family: inherit; }
+    input { font-family: inherit; outline: none; }
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    /* ── HEADER ── */
+    #header { padding: 44px 20px 16px; background: linear-gradient(180deg, #181818 0%, #0f0f0f 100%); }
+    .header-row { display: flex; justify-content: space-between; align-items: center; }
+    .header-label { font-size: 11px; color: #888; letter-spacing: 0.08em; text-transform: uppercase; }
+    .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-top: 2px; }
+    .header-right { text-align: right; }
+    .header-stats { font-size: 11px; color: #888; }
+    .header-goal { font-size: 12px; color: #E8845A; font-weight: 600; margin-top: 2px; }
+
+    /* ── DAY STRIP ── */
+    #day-strip { display: flex; gap: 6px; margin-top: 18px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    #day-strip::-webkit-scrollbar { display: none; }
+    .day-btn { flex: 0 0 auto; min-width: 44px; padding: 8px 10px; border-radius: 10px; border: none; text-align: center; transition: all 0.2s; background: #181818; color: #666; font-weight: 500; font-size: 12px; }
+    .day-btn.today { background: #222; color: #fff; }
+    .day-btn.selected { font-weight: 700; color: #000; }
+    .day-btn-icon { font-size: 9px; margin-top: 2px; opacity: 0.75; }
+
+    /* ── TABS ── */
+    #tabs { display: flex; padding: 0 20px; gap: 8px; border-bottom: 1px solid #1e1e1e; }
+    .tab-btn { flex: 1; padding: 14px 0; background: none; border: none; font-size: 13px; color: #666; font-weight: 400; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab-btn.active { color: #E8845A; font-weight: 700; border-bottom-color: #E8845A; }
+
+    /* ── PANELS ── */
+    .panel { display: none; padding: 20px 20px 0; }
+    .panel.active { display: block; }
+
+    /* ── CARDS ── */
+    .card { background: #181818; border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+    .card-sm { background: #181818; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; border: 1px solid #252525; }
+
+    /* ── RINGS (SVG) ── */
+    .ring-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .ring-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+
+    /* ── CALORIE SUMMARY ── */
+    #cal-card { display: flex; align-items: center; gap: 20px; }
+    #cal-rows { flex: 1; }
+    .cal-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+    .cal-row span:first-child { color: #888; font-size: 12px; }
+    .cal-row.net span:last-child { font-weight: 700; }
+
+    /* ── MACRO ROW ── */
+    #macro-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .macro-card { flex: 1; background: #181818; border-radius: 12px; padding: 12px 10px; text-align: center; }
+    .macro-name { font-size: 11px; color: #888; margin-top: 4px; }
+    .macro-goal { font-size: 10px; color: #555; }
+
+    /* ── STEPS ── */
+    #steps-card { border-radius: 16px; background: #181818; padding: 14px 16px; margin-bottom: 12px; }
+    .steps-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .steps-row span:first-child { font-size: 14px; font-weight: 600; }
+    .steps-val { font-size: 14px; font-weight: 700; color: #7EC89A; }
+    input[type=range] { width: 100%; accent-color: #7EC89A; }
+
+    /* ── TODAY PREVIEW ── */
+    #today-preview { border-radius: 16px; padding: 16px; margin-bottom: 20px; }
+    .preview-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+    .preview-focus { font-size: 17px; font-weight: 700; margin: 2px 0; }
+    .preview-tag { font-size: 12px; }
+    .preview-row { display: flex; justify-content: space-between; align-items: center; }
+    .preview-start { border: none; border-radius: 10px; padding: 10px 16px; font-weight: 700; font-size: 13px; }
+    .preview-meta { font-size: 12px; color: #888; margin-top: 10px; }
+
+    /* ── DAY SELECTOR (plan tab) ── */
+    #plan-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .plan-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .plan-title { font-size: 17px; font-weight: 700; }
+    .plan-tag { font-size: 12px; margin-left: 8px; }
+
+    /* ── REST DAY ── */
+    #rest-card { text-align: center; padding: 48px 20px; color: #666; }
+    .rest-emoji { font-size: 48px; margin-bottom: 12px; }
+    .rest-title { font-size: 16px; font-weight: 600; color: #888; margin-bottom: 6px; }
+    .rest-body { font-size: 13px; color: #555; }
+
+    /* ── RUN DAY ── */
+    #run-card { border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+    .run-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .run-duration-label { font-size: 13px; color: #888; }
+    .run-duration { font-size: 28px; font-weight: 800; }
+    .run-burn-label { font-size: 12px; color: #888; }
+    .run-burn { font-size: 18px; font-weight: 700; color: #7EC89A; margin-top: 2px; }
+    .run-phases { display: flex; flex-direction: column; gap: 12px; }
+    .run-phase { display: flex; gap: 12px; align-items: flex-start; }
+    .run-phase-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #000; flex-shrink: 0; }
+    .run-phase-name { display: flex; justify-content: space-between; }
+    .run-phase-title { font-size: 14px; font-weight: 600; }
+    .run-phase-time { font-size: 13px; font-weight: 700; }
+    .run-phase-note { font-size: 12px; color: #888; margin-top: 2px; }
+    .coach-tip-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .coach-tip-body { font-size: 13px; color: #ccc; line-height: 1.5; }
+
+    /* ── EXERCISE CARDS ── */
+    .ex-card { border-radius: 14px; overflow: hidden; margin-bottom: 8px; transition: all 0.2s; border: 1px solid #252525; }
+    .ex-card.done { background: #1a2a1a; border-color: #7EC89A44; }
+    .ex-card.pending { background: #181818; }
+    .ex-header { width: 100%; background: none; border: none; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .ex-left { display: flex; align-items: center; gap: 12px; }
+    .ex-num { width: 28px; height: 28px; border-radius: 50%; background: #252525; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #888; font-weight: 700; flex-shrink: 0; }
+    .ex-num.done { background: #7EC89A22; color: #7EC89A; }
+    .ex-name { font-size: 14px; font-weight: 600; text-align: left; }
+    .ex-name.done { color: #7EC89A; }
+    .ex-meta { font-size: 11px; color: #888; margin-top: 2px; text-align: left; }
+    .ex-right { display: flex; align-items: center; gap: 8px; }
+    .ex-count { font-size: 11px; color: #666; }
+    .ex-chevron { color: #666; font-size: 12px; }
+    .ex-detail { padding: 0 16px 16px; border-top: 1px solid #252525; }
+    .ex-tip { font-size: 12px; color: #888; font-style: italic; margin: 12px 0; }
+    .set-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .set-btn { padding: 8px 16px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; background: #252525; color: #888; transition: all 0.2s; }
+    .set-btn.done { background: #7EC89A; color: #000; }
+    .no-eq-note { margin: 8px 0; padding: 12px 16px; background: #181818; border-radius: 12px; font-size: 12px; color: #666; text-align: center; }
+
+    /* ── FOOD LOG ── */
+    #add-food-btn { width: 100%; padding: 14px; background: #E8845A; color: #000; border: none; border-radius: 14px; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+    #food-search-panel { background: #181818; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: none; }
+    #food-search-panel.open { display: block; }
+    #food-search { width: 100%; background: #252525; border: none; border-radius: 10px; padding: 10px 14px; color: #f0f0f0; font-size: 14px; margin-bottom: 10px; }
+    #food-results { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+    .food-result-btn { background: #252525; border: none; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; color: #f0f0f0; }
+    .food-result-btn:hover { background: #2e2e2e; }
+    .food-result-name { font-size: 13px; }
+    .food-result-cal { font-size: 13px; font-weight: 600; color: #E8845A; }
+    .food-result-p { font-size: 11px; color: #888; margin-left: 8px; }
+    .custom-sep { margin-top: 12px; border-top: 1px solid #2a2a2a; padding-top: 12px; }
+    .custom-label { font-size: 12px; color: #888; margin-bottom: 8px; }
+    .custom-grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 6px; margin-bottom: 6px; }
+    .custom-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+    .custom-input { background: #252525; border: none; border-radius: 8px; padding: 8px 10px; color: #f0f0f0; font-size: 13px; width: 100%; }
+    #custom-add-btn { width: 100%; padding: 10px; background: #252525; color: #E8845A; border: 1px solid #E8845A44; border-radius: 8px; font-size: 13px; font-weight: 600; }
+    #food-log-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .food-empty { text-align: center; padding: 32px; color: #555; }
+    .food-empty-icon { font-size: 36px; margin-bottom: 8px; }
+    .food-item { background: #181818; border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .food-item-name { font-size: 14px; font-weight: 500; }
+    .food-item-macros { font-size: 11px; color: #666; margin-top: 2px; }
+    .food-item-cal { font-size: 14px; font-weight: 700; color: #E8845A; }
+    .food-item-del { background: none; border: none; color: #555; font-size: 16px; padding: 0; margin-left: 12px; }
+    .toning-tip-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .toning-tip-body { font-size: 13px; color: #ccc; line-height: 1.5; }
+
+    /* ── BOTTOM NAV ── */
+    #bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #111; border-top: 1px solid #1e1e1e; display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
+    .nav-btn { flex: 1; padding: 12px 0; background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .nav-icon { font-size: 20px; }
+    .nav-label { font-size: 10px; color: #555; font-weight: 400; }
+    .nav-btn.active .nav-label { color: #E8845A; font-weight: 700; }
+
+    #scroll-body { overflow-y: auto; padding-bottom: 80px; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div id="header">
+    <div class="header-row">
+      <div>
+        <div class="header-label">Training for</div>
+        <div class="header-title">Toned Body ✨</div>
+      </div>
+      <div class="header-right">
+        <div class="header-stats">160cm · 49kg</div>
+        <div class="header-goal">1700 kcal goal</div>
+      </div>
+    </div>
+    <div id="day-strip"></div>
+  </div>
+
+  <div id="tabs">
+    <button class="tab-btn active" data-tab="today">Today</button>
+    <button class="tab-btn" data-tab="plan">Workout</button>
+    <button class="tab-btn" data-tab="log">Nutrition</button>
+  </div>
+
+  <div id="scroll-body">
+    <!-- TODAY PANEL -->
+    <div class="panel active" id="panel-today">
+      <!-- Calorie card -->
+      <div class="card" id="cal-card">
+        <div class="ring-wrap" id="cal-ring-wrap">
+          <svg id="cal-ring-svg" width="80" height="80"></svg>
+          <div class="ring-label" id="cal-ring-label"></div>
+        </div>
+        <div id="cal-rows">
+          <div class="cal-row"><span>Eaten</span><span id="cal-eaten-val">0 kcal</span></div>
+          <div class="cal-row"><span id="cal-burn-label">Burned (10,000 steps)</span><span id="cal-burn-val" style="color:#7EC89A">−0 kcal</span></div>
+          <div class="cal-row net"><span>Net</span><span id="cal-net-val">0 / 1700</span></div>
+        </div>
+      </div>
+
+      <!-- Macros -->
+      <div id="macro-row">
+        <div class="macro-card">
+          <div class="ring-wrap"><svg id="protein-ring" width="50" height="50"></svg><div class="ring-label" id="protein-ring-label"></div></div>
+          <div class="macro-name">Protein</div><div class="macro-goal">120g</div>
+        </div>
+        <div class="macro-card">
+          <div class="ring-wrap"><svg id="carbs-ring" width="50" height="50"></svg><div class="ring-label" id="carbs-ring-label"></div></div>
+          <div class="macro-name">Carbs</div><div class="macro-goal">180g</div>
+        </div>
+        <div class="macro-card">
+          <div class="ring-wrap"><svg id="fat-ring" width="50" height="50"></svg><div class="ring-label" id="fat-ring-label"></div></div>
+          <div class="macro-name">Fat</div><div class="macro-goal">55g</div>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div id="steps-card">
+        <div class="steps-row">
+          <span>👟 Steps today</span>
+          <span class="steps-val" id="steps-display">10,000</span>
+        </div>
+        <input type="range" id="steps-slider" min="0" max="20000" step="500" value="10000" />
+      </div>
+
+      <!-- Today preview -->
+      <div id="today-preview"></div>
+    </div>
+
+    <!-- PLAN PANEL -->
+    <div class="panel" id="panel-plan">
+      <div id="plan-header"></div>
+      <div id="plan-content"></div>
+    </div>
+
+    <!-- LOG PANEL -->
+    <div class="panel" id="panel-log">
+      <button id="add-food-btn">+ Add Food</button>
+      <div id="food-search-panel">
+        <input type="text" id="food-search" placeholder="Search food…" />
+        <div id="food-results"></div>
+        <div class="custom-sep">
+          <div class="custom-label">Or add custom</div>
+          <div class="custom-grid-2">
+            <input class="custom-input" id="c-name" placeholder="Food name" />
+            <input class="custom-input" id="c-cal" placeholder="kcal" type="number" />
+          </div>
+          <div class="custom-grid-3">
+            <input class="custom-input" id="c-protein" placeholder="protein g" type="number" />
+            <input class="custom-input" id="c-carbs" placeholder="carbs g" type="number" />
+            <input class="custom-input" id="c-fat" placeholder="fat g" type="number" />
+          </div>
+          <button id="custom-add-btn">Add Custom</button>
+        </div>
+      </div>
+      <div id="food-log-list"></div>
+      <div class="card-sm">
+        <div class="toning-tip-label">Toning Tip</div>
+        <div class="toning-tip-body">Hit 120g protein daily — it's the key to muscle definition. Your 10k steps are already a great calorie burn foundation.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav id="bottom-nav">
+    <button class="nav-btn active" data-tab="today"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
+    <button class="nav-btn" data-tab="plan"><span class="nav-icon">💪</span><span class="nav-label">Workout</span></button>
+    <button class="nav-btn" data-tab="log"><span class="nav-icon">🥗</span><span class="nav-label">Food</span></button>
+  </nav>
+</div>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────
+
+const PROFILE = { calorieGoal: 1700, proteinGoal: 120, carbGoal: 180, fatGoal: 55 };
+
+const TRAINING_PLAN = [
+  {
+    day: "Monday", focus: "Lower Body", tag: "Glutes & Legs", color: "#E8845A", icon: "🍑",
+    exercises: [
+      { name: "Bodyweight Squat", sets: 4, reps: "15", rest: "45s", tip: "Drive knees out, chest tall, sit back like a chair" },
+      { name: "Glute Bridge", sets: 4, reps: "15", rest: "45s", tip: "Squeeze hard at the top for 2 full seconds" },
+      { name: "Reverse Lunge", sets: 3, reps: "10 each leg", rest: "45s", tip: "Back knee hovers 2cm above floor, front shin stays vertical" },
+      { name: "Sumo Squat", sets: 3, reps: "12", rest: "45s", tip: "Wide stance, toes out 45°, feel inner thighs working" },
+      { name: "Single-Leg Glute Bridge", sets: 3, reps: "12 each", rest: "30s", tip: "Non-working leg stays bent and lifted — don't let hips drop" },
+      { name: "Calf Raise", sets: 3, reps: "20", rest: "30s", tip: "Full range — heels all the way down, rise all the way up" },
+    ],
+  },
+  {
+    day: "Tuesday", focus: "Run", tag: "Easy 30 min", color: "#5BC4E6", icon: "🏃‍♀️", runDay: true,
+    runPlan: {
+      duration: "30 min",
+      structure: [
+        { phase: "Warm-up walk", time: "5 min", note: "Brisk walk, get heart rate up" },
+        { phase: "Easy jog", time: "20 min", note: "Conversational pace — you can talk in full sentences" },
+        { phase: "Cool-down walk", time: "5 min", note: "Slow down gradually, deep breaths" },
+      ],
+      tip: "Easy run days build your aerobic base. Don't go hard — you should feel refreshed, not wrecked.",
+      calBurn: 240,
+    },
+  },
+  {
+    day: "Wednesday", focus: "Upper Body", tag: "Push & Pull", color: "#C46ECF", icon: "💪",
+    exercises: [
+      { name: "Push-Up", sets: 4, reps: "10–12", rest: "60s", tip: "Core tight, lower chest to floor, full range of motion" },
+      { name: "Wide Push-Up", sets: 3, reps: "10", rest: "60s", tip: "Hands wider than shoulders — hits chest more" },
+      { name: "Tricep Push-Up", sets: 3, reps: "10", rest: "60s", tip: "Elbows point straight back, not out to the sides" },
+      { name: "Superman Hold", sets: 3, reps: "12", rest: "45s", tip: "Lift arms and legs simultaneously, squeeze back at top" },
+      { name: "Pike Push-Up", sets: 3, reps: "8", rest: "60s", tip: "Hips high, lower head toward floor — works shoulders" },
+      { name: "Plank Shoulder Tap", sets: 3, reps: "10 each", rest: "45s", tip: "Hips stay level — resist the rotation, that's the point" },
+    ],
+  },
+  {
+    day: "Thursday", focus: "Core & Glutes", tag: "Stability", color: "#E8C05A", icon: "🔥",
+    exercises: [
+      { name: "Plank", sets: 3, reps: "45s hold", rest: "45s", tip: "Squeeze glutes AND abs simultaneously — whole body tight" },
+      { name: "Dead Bug", sets: 3, reps: "10 each side", rest: "45s", tip: "Low back stays imprinted on floor the entire time" },
+      { name: "Hip Thrust (floor)", sets: 4, reps: "15", rest: "45s", tip: "Shoulders on floor, drive hips up — full extension at top" },
+      { name: "Side-Lying Clam", sets: 3, reps: "15 each", rest: "30s", tip: "Feet stay stacked, only the top knee rotates open" },
+      { name: "Mountain Climber", sets: 3, reps: "30s", rest: "30s", tip: "Hips stay level — don't let them pike up or sag" },
+      { name: "Bicycle Crunch", sets: 3, reps: "20 total", rest: "30s", tip: "Slow and controlled — elbow to opposite knee, twist fully" },
+    ],
+  },
+  {
+    day: "Friday", focus: "Full Body", tag: "No Equipment", color: "#7EC89A", icon: "⚡",
+    exercises: [
+      { name: "Squat Jump", sets: 4, reps: "10", rest: "60s", tip: "Land softly with bent knees — absorb the impact" },
+      { name: "Push-Up to Down Dog", sets: 3, reps: "10", rest: "60s", tip: "Push-up, then press hips up into downward dog stretch" },
+      { name: "Alternating Reverse Lunge", sets: 3, reps: "10 each", rest: "60s", tip: "Smooth, controlled step back — keep torso upright" },
+      { name: "Burpee", sets: 3, reps: "8", rest: "60s", tip: "Step back instead of jumping if needed — form over speed" },
+      { name: "Side Plank", sets: 3, reps: "30s each", rest: "30s", tip: "Stack feet or stagger them — hips high, body straight" },
+      { name: "Donkey Kick", sets: 3, reps: "15 each", rest: "30s", tip: "Keep hips square to floor — kick straight up, squeeze glute" },
+    ],
+  },
+  {
+    day: "Saturday", focus: "Run", tag: "Interval 25 min", color: "#E85A5A", icon: "🏃‍♀️", runDay: true,
+    runPlan: {
+      duration: "25 min",
+      structure: [
+        { phase: "Warm-up walk", time: "5 min", note: "Start easy, loosen up" },
+        { phase: "Intervals ×5", time: "15 min", note: "1 min fast run + 2 min easy jog — repeat 5 times" },
+        { phase: "Cool-down walk", time: "5 min", note: "Walk it out, stretch calves and hip flexors after" },
+      ],
+      tip: "Interval runs are your secret weapon for toning — they spike your metabolism for hours after. Push during the 1-min efforts.",
+      calBurn: 290,
+    },
+  },
+  {
+    day: "Sunday", focus: "Rest", tag: "Full Recovery", color: "#A0A0A0", icon: "💤",
+    restDay: true,
+  },
+];
+
+const FOOD_DB = [
+  { name: "Chicken Breast (100g)", cal: 165, protein: 31, carbs: 0, fat: 3.6 },
+  { name: "Greek Yogurt (150g)", cal: 88, protein: 15, carbs: 6, fat: 0.7 },
+  { name: "Eggs (2 large)", cal: 143, protein: 13, carbs: 1, fat: 10 },
+  { name: "Oats (50g dry)", cal: 190, protein: 7, carbs: 32, fat: 3.4 },
+  { name: "Banana (medium)", cal: 89, protein: 1.1, carbs: 23, fat: 0.3 },
+  { name: "Rice (100g cooked)", cal: 130, protein: 2.7, carbs: 28, fat: 0.3 },
+  { name: "Broccoli (100g)", cal: 35, protein: 2.4, carbs: 7, fat: 0.4 },
+  { name: "Salmon (100g)", cal: 208, protein: 20, carbs: 0, fat: 13 },
+  { name: "Almonds (30g)", cal: 173, protein: 6, carbs: 6, fat: 15 },
+  { name: "Sweet Potato (150g)", cal: 130, protein: 2.4, carbs: 30, fat: 0.2 },
+  { name: "Cottage Cheese (100g)", cal: 98, protein: 11, carbs: 3.4, fat: 4.3 },
+  { name: "Protein Shake (1 scoop)", cal: 120, protein: 24, carbs: 4, fat: 1.5 },
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+
+const todayIdx = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+let selectedDay = todayIdx;
+let activeTab = 'today';
+let steps = 10000;
+let foodLog = [];      // {id, name, cal, protein, carbs, fat}
+let completedSets = {}; // "exName-setIdx" -> bool
+let expandedEx = null;
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+
+function makeSVGRing(svgEl, pct, size, stroke, color) {
+  const r = (size - stroke) / 2;
+  const circ = 2 * Math.PI * r;
+  const dash = (Math.min(pct, 100) / 100) * circ;
+  svgEl.setAttribute('width', size);
+  svgEl.setAttribute('height', size);
+  svgEl.innerHTML = `
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#2a2a2a" stroke-width="${stroke}" />
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}"
+      stroke-width="${stroke}" stroke-dasharray="${dash} ${circ}"
+      stroke-linecap="round" transform="rotate(-90 ${size/2} ${size/2})"
+      style="transition:stroke-dasharray 0.5s ease" />
+  `;
+}
+
+function fmt(n, dec=1) { return Math.round(n * Math.pow(10,dec)) / Math.pow(10,dec); }
+
+// ── RENDER: TODAY ─────────────────────────────────────────────────────────────
+
+function renderToday() {
+  const totalCal  = foodLog.reduce((s,i) => s + i.cal, 0);
+  const totalProt = foodLog.reduce((s,i) => s + i.protein, 0);
+  const totalCarb = foodLog.reduce((s,i) => s + i.carbs, 0);
+  const totalFat  = foodLog.reduce((s,i) => s + i.fat, 0);
+  const burned    = Math.round(steps * 0.04);
+  const net       = totalCal - burned;
+  const left      = PROFILE.calorieGoal - net;
+  const over      = left < 0;
+
+  // Calorie ring
+  const calPct = Math.min((net / PROFILE.calorieGoal) * 100, 100);
+  const calColor = over ? '#E85A5A' : '#E8845A';
+  makeSVGRing(document.getElementById('cal-ring-svg'), calPct, 80, 9, calColor);
+  document.getElementById('cal-ring-label').innerHTML =
+    `<div style="font-size:16px;font-weight:800;color:${calColor}">${Math.abs(left)}</div>
+     <div style="font-size:9px;color:#888;margin-top:1px">${over ? 'over' : 'left'}</div>`;
+
+  document.getElementById('cal-eaten-val').textContent = `${totalCal} kcal`;
+  document.getElementById('cal-burn-label').textContent = `Burned (${steps.toLocaleString()} steps)`;
+  document.getElementById('cal-burn-val').textContent = `−${burned} kcal`;
+  document.getElementById('cal-net-val').textContent = `${net} / ${PROFILE.calorieGoal}`;
+  document.getElementById('steps-display').textContent = steps.toLocaleString();
+
+  // Macro rings
+  const macros = [
+    { id: 'protein-ring', labelId: 'protein-ring-label', val: totalProt, goal: PROFILE.proteinGoal, color: '#5B8EE6' },
+    { id: 'carbs-ring',   labelId: 'carbs-ring-label',   val: totalCarb, goal: PROFILE.carbGoal,    color: '#E8C05A' },
+    { id: 'fat-ring',     labelId: 'fat-ring-label',     val: totalFat,  goal: PROFILE.fatGoal,     color: '#E85A5A' },
+  ];
+  macros.forEach(m => {
+    makeSVGRing(document.getElementById(m.id), (m.val / m.goal) * 100, 50, 6, m.color);
+    document.getElementById(m.labelId).innerHTML =
+      `<span style="font-size:11px;font-weight:700;color:${m.color}">${fmt(m.val,0)}</span>`;
+  });
+
+  // Today preview
+  const plan = TRAINING_PLAN[todayIdx];
+  let meta = '';
+  if (plan.restDay) meta = '';
+  else if (plan.runDay) meta = `<div class="preview-meta">${plan.runPlan.duration} · ~${plan.runPlan.calBurn} kcal burn · outdoors</div>`;
+  else meta = `<div class="preview-meta">${plan.exercises.length} exercises · ~${plan.exercises.reduce((s,e)=>s+e.sets,0)} sets · no equipment</div>`;
+
+  const preview = document.getElementById('today-preview');
+  preview.style.background = `linear-gradient(135deg, ${plan.color}22 0%, #181818 100%)`;
+  preview.style.border = `1px solid ${plan.color}33`;
+  preview.innerHTML = `
+    <div class="preview-row">
+      <div>
+        <div class="preview-label">Today</div>
+        <div class="preview-focus">${plan.focus}</div>
+        <div class="preview-tag" style="color:${plan.color}">${plan.tag}</div>
+      </div>
+      <button class="preview-start" style="background:${plan.color};color:#000"
+        onclick="switchTab('plan')">Start →</button>
+    </div>
+    ${meta}
+  `;
+}
+
+// ── RENDER: PLAN ──────────────────────────────────────────────────────────────
+
+function renderPlan() {
+  const plan = TRAINING_PLAN[selectedDay];
+
+  // Header
+  document.getElementById('plan-header').innerHTML = `
+    <div class="plan-dot" style="background:${plan.color}"></div>
+    <div>
+      <span class="plan-title">${plan.day} — ${plan.focus}</span>
+      <span class="plan-tag" style="color:${plan.color}">${plan.tag}</span>
+    </div>
+  `;
+
+  const content = document.getElementById('plan-content');
+
+  if (plan.restDay) {
+    content.innerHTML = `
+      <div id="rest-card">
+        <div class="rest-emoji">😴</div>
+        <div class="rest-title">Rest & Recovery</div>
+        <div class="rest-body">Your 10k steps today are plenty. Muscles grow when you rest.</div>
+      </div>`;
+    return;
+  }
+
+  if (plan.runDay) {
+    const phases = plan.runPlan.structure.map((s, i) => `
+      <div class="run-phase">
+        <div class="run-phase-num" style="background:${plan.color}">${i+1}</div>
+        <div style="flex:1">
+          <div class="run-phase-name">
+            <span class="run-phase-title">${s.phase}</span>
+            <span class="run-phase-time" style="color:${plan.color}">${s.time}</span>
+          </div>
+          <div class="run-phase-note">${s.note}</div>
+        </div>
+      </div>`).join('');
+    content.innerHTML = `
+      <div id="run-card" style="background:linear-gradient(135deg,${plan.color}22 0%,#181818 100%);border:1px solid ${plan.color}33">
+        <div class="run-top">
+          <div>
+            <div class="run-duration-label">Total duration</div>
+            <div class="run-duration" style="color:${plan.color}">${plan.runPlan.duration}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="run-burn-label">Est. burn</div>
+            <div class="run-burn">~${plan.runPlan.calBurn} kcal</div>
+          </div>
+        </div>
+        <div class="run-phases">${phases}</div>
+      </div>
+      <div class="card-sm">
+        <div class="coach-tip-label">Coach tip</div>
+        <div class="coach-tip-body">💡 ${plan.runPlan.tip}</div>
+      </div>`;
+    return;
+  }
+
+  // Strength day
+  const cards = plan.exercises.map((ex, idx) => {
+    const completedCount = Array.from({length: ex.sets}, (_, i) => completedSets[`${ex.name}-${i}`]).filter(Boolean).length;
+    const allDone = completedCount === ex.sets;
+    const setButtons = Array.from({length: ex.sets}, (_, i) => {
+      const done = !!completedSets[`${ex.name}-${i}`];
+      return `<button class="set-btn${done?' done':''}" onclick="toggleSet('${ex.name.replace(/'/g,"\\'")}',${i})"
+        data-ex="${ex.name.replace(/'/g,"\\'")}">Set ${i+1}</button>`;
+    }).join('');
+    const isExpanded = expandedEx === ex.name;
+    return `
+      <div class="ex-card ${allDone?'done':'pending'}" id="ex-${idx}">
+        <button class="ex-header" onclick="toggleEx('${ex.name.replace(/'/g,"\\'")}')">
+          <div class="ex-left">
+            <div class="ex-num${allDone?' done':''}">${allDone ? '✓' : idx+1}</div>
+            <div>
+              <div class="ex-name${allDone?' done':''}">${ex.name}</div>
+              <div class="ex-meta">${ex.sets} × ${ex.reps} · rest ${ex.rest}</div>
+            </div>
+          </div>
+          <div class="ex-right">
+            <span class="ex-count">${completedCount}/${ex.sets}</span>
+            <span class="ex-chevron">${isExpanded ? '▲' : '▼'}</span>
+          </div>
+        </button>
+        ${isExpanded ? `
+          <div class="ex-detail">
+            <div class="ex-tip">💡 ${ex.tip}</div>
+            <div class="set-btns">${setButtons}</div>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+
+  content.innerHTML = cards + `<div class="no-eq-note">All exercises are bodyweight — no equipment needed 🏠</div>`;
+}
+
+// ── RENDER: FOOD LOG ──────────────────────────────────────────────────────────
+
+function renderFoodLog() {
+  const list = document.getElementById('food-log-list');
+  if (foodLog.length === 0) {
+    list.innerHTML = `<div class="food-empty"><div class="food-empty-icon">🥗</div><div>Nothing logged yet today</div></div>`;
+  } else {
+    list.innerHTML = foodLog.map(item => `
+      <div class="food-item">
+        <div>
+          <div class="food-item-name">${item.name}</div>
+          <div class="food-item-macros">P: ${item.protein}g · C: ${item.carbs}g · F: ${item.fat}g</div>
+        </div>
+        <div style="display:flex;align-items:center">
+          <span class="food-item-cal">${item.cal}</span>
+          <button class="food-item-del" onclick="removeFood(${item.id})">✕</button>
+        </div>
+      </div>`).join('');
+  }
+  renderFoodSearch();
+}
+
+function renderFoodSearch() {
+  const q = document.getElementById('food-search').value.toLowerCase();
+  const results = FOOD_DB.filter(f => f.name.toLowerCase().includes(q));
+  document.getElementById('food-results').innerHTML = results.map(f => `
+    <button class="food-result-btn" onclick="addFood(${JSON.stringify(f).replace(/"/g,'&quot;')})">
+      <span class="food-result-name">${f.name}</span>
+      <div>
+        <span class="food-result-cal">${f.cal} kcal</span>
+        <span class="food-result-p">${f.protein}g P</span>
+      </div>
+    </button>`).join('');
+}
+
+// ── RENDER: DAY STRIP ─────────────────────────────────────────────────────────
+
+function renderDayStrip() {
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  document.getElementById('day-strip').innerHTML = days.map((d, i) => {
+    const plan = TRAINING_PLAN[i];
+    const isToday = i === todayIdx;
+    const isSel = i === selectedDay;
+    let bg = '#181818', color = '#666', fw = 500;
+    if (isSel) { bg = plan.color; color = '#000'; fw = 700; }
+    else if (isToday) { bg = '#222'; color = '#fff'; }
+    const shadow = isSel ? `box-shadow:0 0 12px ${plan.color}55` : '';
+    return `<button class="day-btn${isToday?' today':''}${isSel?' selected':''}"
+      style="background:${bg};color:${color};font-weight:${fw};${shadow}"
+      onclick="selectDay(${i})">
+        <div>${d}</div>
+        <div class="day-btn-icon">${plan.icon}</div>
+      </button>`;
+  }).join('');
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`panel-${tab}`).classList.add('active');
+  document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+  document.querySelector(`.nav-btn[data-tab="${tab}"]`).classList.add('active');
+  if (tab === 'today') renderToday();
+  if (tab === 'plan') { renderDayStrip(); renderPlan(); }
+  if (tab === 'log') renderFoodLog();
+}
+
+function selectDay(idx) {
+  selectedDay = idx;
+  expandedEx = null;
+  switchTab('plan');
+}
+
+function toggleEx(name) {
+  expandedEx = expandedEx === name ? null : name;
+  renderPlan();
+}
+
+function toggleSet(exName, setIdx) {
+  const key = `${exName}-${setIdx}`;
+  completedSets[key] = !completedSets[key];
+  renderPlan();
+}
+
+function addFood(food) {
+  if (typeof food === 'string') food = JSON.parse(food);
+  foodLog.push({ ...food, id: Date.now() });
+  document.getElementById('food-search-panel').classList.remove('open');
+  document.getElementById('food-search').value = '';
+  renderFoodLog();
+  renderToday();
+}
+
+function removeFood(id) {
+  foodLog = foodLog.filter(i => i.id !== id);
+  renderFoodLog();
+  renderToday();
+}
+
+// ── EVENTS ────────────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+document.getElementById('steps-slider').addEventListener('input', e => {
+  steps = parseInt(e.target.value);
+  renderToday();
+});
+
+document.getElementById('add-food-btn').addEventListener('click', () => {
+  document.getElementById('food-search-panel').classList.toggle('open');
+  renderFoodSearch();
+});
+
+document.getElementById('food-search').addEventListener('input', renderFoodSearch);
+
+document.getElementById('custom-add-btn').addEventListener('click', () => {
+  const name = document.getElementById('c-name').value.trim();
+  const cal  = parseFloat(document.getElementById('c-cal').value) || 0;
+  if (!name || !cal) return;
+  addFood({
+    name, cal,
+    protein: parseFloat(document.getElementById('c-protein').value) || 0,
+    carbs:   parseFloat(document.getElementById('c-carbs').value) || 0,
+    fat:     parseFloat(document.getElementById('c-fat').value) || 0,
+  });
+  ['c-name','c-cal','c-protein','c-carbs','c-fat'].forEach(id => document.getElementById(id).value = '');
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+renderDayStrip();
+renderToday();
+</script>
+</body>
+</html>
